@@ -3,3 +3,4 @@ lf.exe
 tags
 dist/
 vendor/
+.DS_Store

@@ -31,6 +31,7 @@ var (
 	gSingleMode     bool
 	gPrintLastDir   bool
 	gPrintSelection bool
+	gAutocd         bool
 	gClientID       int
 	gHostname       string
 	gLastDirPath    string
@@ -287,6 +288,11 @@ func main() {
 	flag.Var(&gCommands,
 		"command",
 		"command to execute on client initialization")
+
+	flag.BoolVar(&gAutocd,
+		"autocd",
+		false,
+		"change to last directory using autocd on exit")
 
 	flag.StringVar(&gLogPath,
 		"log",

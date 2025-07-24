@@ -7,10 +7,12 @@ import (
 	"log"
 	"net"
 	"os"
+	"path/filepath"
 	"strings"
 	"sync"
 	"time"
 
+	"github.com/codinganovel/autocd-go"
 	"github.com/gdamore/tcell/v2"
 )
 
@@ -66,6 +68,22 @@ func run() {
 	app.loop()
 
 	app.ui.screen.Fini()
+
+	if gAutocd {
+		targetPath := app.nav.currDir().path
+		
+		// If current path is a file, use parent directory
+		if info, err := os.Stat(targetPath); err == nil && !info.IsDir() {
+			targetPath = filepath.Dir(targetPath)
+		}
+		
+		autocd.ExitWithDirectoryOrFallback(targetPath, func() {
+			// Fallback to normal lf exit behavior if autocd fails
+			os.Exit(0)
+		})
+		// This line should never be reached
+		return
+	}
 
 	if gLastDirPath != "" {
 		writeLastDir(gLastDirPath, app.nav.currDir().path)
